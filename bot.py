@@ -1,4 +1,4 @@
-import requests
+import aiohttp
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, CallbackContext
 
@@ -19,11 +19,11 @@ async def search_logins(update: Update, context: CallbackContext):
         return
 
     try:
-        # Make a request to your API with the provided website
-        response = requests.get(f"{API_URL}?busca={website}&token=yoda")
-        data = response.text
+        async with aiohttp.ClientSession() as session:
+            async with session.get(f"{API_URL}?busca={website}&token=yoda") as response:
+                data = await response.text()
 
-        if response.status_code == 200 and data:
+        if response.status == 200 and data:
             # Save the response data into a text file
             with open(f"{website}_login_data.txt", "w") as file:
                 file.write(data)
@@ -41,9 +41,9 @@ async def main():
     app.add_handler(CommandHandler("search", search_logins))
 
     print("Bot is running...")
-    await app.start()
-    await app.idle()
+    await app.run_polling()
 
 if __name__ == '__main__':
     import asyncio
     asyncio.run(main())
+    
