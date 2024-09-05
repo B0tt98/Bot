@@ -45,16 +45,5 @@ async def main():
     await app.run_polling()
 
 if __name__ == '__main__':
-    try:
-        # Check if the event loop is already running
-        loop = asyncio.get_event_loop()
-        if loop.is_running():
-            # If the event loop is already running, use the current loop to run the main coroutine
-            loop.create_task(main())
-            loop.run_forever()
-        else:
-            # If no event loop is running, create a new one
-            asyncio.run(main())
-    except RuntimeError as e:
-        print(f"Runtime error: {e}")
-        
+    asyncio.run(main())
+    
