@@ -45,5 +45,11 @@ async def main():
 
 if __name__ == '__main__':
     import asyncio
-    asyncio.run(main())
+
+    # Create a new event loop and set it as the current one
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    
+    # Run the main coroutine
+    loop.run_until_complete(main())
     
